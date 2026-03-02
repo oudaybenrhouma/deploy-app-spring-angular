@@ -10,8 +10,9 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://192.168.187.9:4200") // Add your allowed origins here
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                // Accepts requests from the Angular container (port 80 inside Docker → 4200 on host)
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
     }
 }
