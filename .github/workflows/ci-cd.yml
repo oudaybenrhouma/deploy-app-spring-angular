@@ -43,47 +43,47 @@ jobs:
 
       - name: Build backend Docker image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/springboot-app:latest ./springboot/app
+          docker build -t ${{ secrets.oudaybenrhouma }}/springboot-app:latest ./springboot/app
 
       # ─────────────────────────────────────────────
       # 4. Build frontend Angular
       # ─────────────────────────────────────────────
       - name: Build frontend Docker image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/angular-app:latest ./angular-app
+          docker build -t ${{ secrets.oudaybenrhouma }}/angular-app:latest ./angular-app
 
       # ─────────────────────────────────────────────
       # 5. Push des images vers Docker Hub
       # ─────────────────────────────────────────────
       - name: Push backend image to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/springboot-app:latest
+          docker push ${{ secrets.oudaybenrhouma }}/springboot-app:latest
 
       - name: Push frontend image to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/angular-app:latest
+          docker push ${{ secrets.oudaybenrhouma }}/angular-app:latest
 
       # ─────────────────────────────────────────────
       # 6. Test de l'application avec Docker Compose
       # ─────────────────────────────────────────────
-      - name: Update docker-compose to use freshly built images
+      - name: Update docker compose to use freshly built images
         run: |
-          sed -i "s|nouran10/springboot-app|${{ secrets.DOCKERHUB_USERNAME }}/springboot-app|g" docker-compose.yml
-          sed -i "s|nouran10/angular-app|${{ secrets.DOCKERHUB_USERNAME }}/angular-app|g" docker-compose.yml
+          sed -i "s|nouran10/springboot-app|${{ secrets.oudaybenrhouma }}/springboot-app|g" docker-compose.yml
+          sed -i "s|nouran10/angular-app|${{ secrets.oudaybenrhouma }}/angular-app|g" docker-compose.yml
 
       - name: Start application with Docker Compose
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: Wait for services to be ready
         run: sleep 40
 
       - name: Verify all containers are running
         run: |
-          docker-compose ps
+          docker compose ps
           echo "--- Backend logs ---"
-          docker-compose logs spring-boot-app --tail=30
+          docker compose logs spring-boot-app --tail=30
           echo "--- Frontend logs ---"
-          docker-compose logs angular-app --tail=20
+          docker compose logs angular-app --tail=20
 
       - name: Test backend health endpoint
         run: |
@@ -99,4 +99,4 @@ jobs:
 
       - name: Tear down Docker Compose
         if: always()
-        run: docker-compose down -v
+        run: docker compose down -v
